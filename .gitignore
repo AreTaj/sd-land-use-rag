@@ -7,3 +7,10 @@ __pycache__/
 *.docx
 *.pdf
 *.log
+
+# Ignore all markdown except README
+*.md
+!README.md
+
+# Ignore all text files
+*.txt
