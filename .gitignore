@@ -1,9 +1,16 @@
+# Environment & Large Data
 .venv/
 data/
+models/
+
+# Tooling & Metadata
 __pycache__/
 *.pyc
 .DS_Store
+.ipynb_checkpoints/
 
+# Ignore all text files
+*.txt
 *.docx
 *.pdf
 *.log
@@ -12,5 +19,3 @@ __pycache__/
 *.md
 !README.md
 
-# Ignore all text files
-*.txt
