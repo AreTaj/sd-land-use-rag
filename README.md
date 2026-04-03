@@ -75,9 +75,11 @@ Run `notebooks/06_advanced_retrieval_enhancement.ipynb` to transition to a profe
 1. **Hybrid Search**: Merging Neural (Semantic) and BM25 (Keyword) results via Reciprocal Rank Fusion.
 2. **Neural Reranking**: Utilizing a Cross-Encoder to validate and re-sort candidates for maximum precision.
 
-### Stage 7: Domain-Specific Fine-Tuning (In Progress)
+### Stage 7: Domain-Specific Fine-Tuning
 
-Planned adaptation of the Transformer encoder using Masked Language Modeling (MLM) on the specific legal vocabulary of the San Diego Municipal Code.
+Adapted the `legal-bert-base-uncased` encoder using Masked Language Modeling (MLM) on the San Diego Municipal Code corpus via Google Colab.
+*   **Result**: Achieved a final evaluation loss of **0.6786** and a perplexity of **1.9712**.
+*   **Artifacts**: Fine-tuned weights are stored locally in `models/san_diego_legal_bert` and backed up to Google Drive.
 
 ## Data Source
 
