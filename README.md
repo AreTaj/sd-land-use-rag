@@ -1,6 +1,6 @@
 # San Diego Land Use RAG
 
-A Retrieval-Augmented Generation (RAG) system designed to provide intelligent querying and analysis of the San Diego Municipal Code (Land Development Code). This project implements a multi-stage data pipeline that automates ingestion, structured parsing, and exploratory analysis of municipal documents in preparation for a production AI retrieval system.
+A Retrieval-Augmented Generation (RAG) system designed to provide intelligent querying and analysis of the San Diego Municipal Code (Land Development Code). This project implements a complete 10-stage pipeline spanning document ingestion, domain-adapted model fine-tuning, and rigorous end-to-end evaluation of both retrieval precision and generative quality.
 
 ## Project Structure
 
@@ -14,6 +14,12 @@ A Retrieval-Augmented Generation (RAG) system designed to provide intelligent qu
   - `04_data_cleaning_and_chunking.ipynb`: Semantic text cleaning and citation-aware chunking.
   - `05_vector_store_ingestion.ipynb`: Embeddings generation and ChromaDB persistence.
   - `06_advanced_retrieval_enhancement.ipynb`: Implementation of Hybrid Search and Neural Reranking.
+  - `07_finetuning_domain_adaptation.ipynb`: MLM-based domain adaptation of Legal-BERT (Colab).
+  - `07b_contrastive_finetuning.ipynb`: Contrastive fine-tuning for dense retrieval.
+  - `08_eval_data.ipynb`: Synthetic ground truth generation via Ollama/Phi-4 (Colab).
+  - `09_comparative_retrieval_benchmarking.ipynb`: Statistical benchmarking of retrieval architectures.
+  - `10_generative_evaluation.ipynb`: End-to-end generative evaluation with ROUGE-L, BERTScore, and Faithfulness (Colab).
+- `models/`: Fine-tuned model weights (directory is Git-ignored).
 - `tests/`: Diagnostic and unit tests.
 
 ## Getting Started
@@ -44,34 +50,28 @@ A Retrieval-Augmented Generation (RAG) system designed to provide intelligent qu
 
 ## Usage
 
-### Stage 1: Ingesting & Auditing Data
-
-The `ingest.py` script identifies and downloads Division PDFs for specific chapters of the San Diego Municipal Code. Run `notebooks/01_raw_pdf_inspection.ipynb` to audit these files for layout and OCR requirements.
+### Stage 1: Ingesting and Auditing Data
+The `ingest.py` CLI tool identifies and downloads Division PDFs for specific chapters of the San Diego Municipal Code. The accompanying notebook (`01_raw_pdf_inspection.ipynb`) audits these files for layout complexity and OCR requirements.
 
 **Download target chapters:**
 ```bash
 python3 sd_land_use/ingest.py --chapters 11 12 13 14 15
 ```
 
-### Stage 2: Parsing Documents
-
-Run `notebooks/02_document_parsing.ipynb` to extract structured text and metadata from the downloaded PDFs. Output is written to `data/processed/parsed_records.jsonl`.
+### Stage 2: Document Parsing
+The `02_document_parsing.ipynb` notebook extracts structured text and metadata from the downloaded PDFs. Output is written to `data/processed/parsed_records.jsonl`.
 
 ### Stage 3: Exploratory Data Analysis
+The `03_parsed_data_eda.ipynb` notebook analyzes parsed records for data quality and citation density, informing the downstream cleaning strategy.
 
-Run `notebooks/03_parsed_data_eda.ipynb` to analyze records for data quality and citation density, informing the cleaning strategy.
-
-### Stage 4: Cleaning & Chunking
-
-Run `notebooks/04_data_cleaning_and_chunking.ipynb` to remove noise, normalize legal identifiers, and segment text into overlapping chunks that preserve citation context.
+### Stage 4: Cleaning and Chunking
+The `04_data_cleaning_and_chunking.ipynb` notebook removes noise, normalizes legal identifiers, and segments text into overlapping chunks that preserve citation context.
 
 ### Stage 5: Vector Store Ingestion
-
-Run `notebooks/05_vector_store_ingestion.ipynb` to generate embeddings for the semantic chunks and initialize a persistent ChromaDB vector store.
+The `05_vector_store_ingestion.ipynb` notebook generates embeddings for the semantic chunks and persists them to a ChromaDB vector store.
 
 ### Stage 6: Advanced Retrieval Enhancement
-
-Run `notebooks/06_advanced_retrieval_enhancement.ipynb` to transition to a professional two-stage pipeline:
+The `06_advanced_retrieval_enhancement.ipynb` notebook implements a professional two-stage retrieval pipeline:
 1. **Hybrid Search**: Merging Neural (Semantic) and BM25 (Keyword) results via Reciprocal Rank Fusion.
 2. **Neural Reranking**: Utilizing a Cross-Encoder to validate and re-sort candidates for maximum precision.
 
@@ -84,8 +84,8 @@ Addressed the embedding anisotropy problem by fine-tuning the MLM-adapted model 
 *   **Significance**: This step transformed the model from a grammar-aware encoder into a specialized dense retriever, increasing the retrieval Hit Rate from **8%** to **72%**.
 
 ### Stage 8: Synthetic Evaluation Data Generation
-Implemented a high-fidelity data generation pipeline using **Ollama** and the **Phi-4 Mini** model. Total of 50 complex, user-centric queries were synthetically generated and mapped to substantive (>150 char) legal document chunks to establish a "Ground Truth" for benchmarking.
-*   **Framework**: Native Google Colab execution with local un-throttled inference.
+Implemented a high-fidelity data generation pipeline using **Ollama** and the **Phi-4 Mini** model. A total of 50 complex, user-centric queries were synthetically generated and mapped to substantive (>150 char) legal document chunks to establish a Ground Truth dataset for benchmarking.
+*   **Framework**: Native Google Colab execution with local unthrottled inference.
 
 ### Stage 9: Comparative Retrieval Benchmarking
 Conducted a rigorous statistical evaluation of three distinct retrieval architectures against the synthetic ground truth:
@@ -99,6 +99,17 @@ Conducted a rigorous statistical evaluation of three distinct retrieval architec
 | **Hit Rate @ 5** | 4% | 30% | **72%** |
 
 **Conclusion**: The domain-specific, contrastive-trained model outperforms the industry-standard generic retriever by **140%** in retrieval precision.
+
+### Stage 10: End-to-End Generative Evaluation
+Evaluated the complete RAG pipeline (retrieval through response generation) using a hybrid approach combining deterministic NLP metrics with LLM-based hallucination detection. All evaluation was conducted on Google Colab using Ollama and Phi-4 Mini, consistent with the methodology established in Stage 08.
+
+| Metric | Score | Description |
+| :--- | :--- | :--- |
+| **ROUGE-L (F1)** | 0.2024 | Structural overlap between generated answers and source text. Low score confirms the system generates original paraphrased answers rather than copying legal text verbatim. |
+| **BERTScore (F1)** | 0.8493 | Semantic similarity between generated answers and ground truth, accounting for paraphrasing and synonymy. |
+| **Faithfulness** | 0.7350 | LLM-judged groundedness score (0.0-1.0). Measures whether generated claims are supported by retrieved context. |
+
+**Conclusion**: The system demonstrates strong semantic alignment (BERTScore 0.85) with minimal hallucination (Faithfulness 0.74). When the retriever lacks sufficient context, the system appropriately declines to answer rather than fabricating information.
 
 ## Data Source
 The data is sourced from the [San Diego City Clerk Official Municipal Code](https://www.sandiego.gov/city-clerk/officialdocs/municipal-code).
