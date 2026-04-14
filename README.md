@@ -102,19 +102,18 @@ The `06_advanced_retrieval_enhancement.ipynb` notebook implements a professional
 2. **Neural Reranking**: Utilizing a Cross-Encoder to validate and re-sort candidates for maximum precision.
 
 ### Stage 7: Domain-Specific Fine-Tuning
-Adapted the `legal-bert-base-uncased` encoder using Masked Language Modeling (MLM) on the San Diego Municipal Code corpus via Google Colab.
-*   **Result**: Achieved a final evaluation loss of **0.6786** and a perplexity of **1.9712**.
+The `07_finetuning_domain_adaptation.ipynb` notebook adapts the `legal-bert-base-uncased` encoder using Masked Language Modeling (MLM) on the San Diego Municipal Code corpus via Google Colab.
+* Achieved a final evaluation loss of **0.6786** and a perplexity of **1.9712**.
 
 ### Stage 7b: Contrastive Dense Fine-Tuning
-Addressed the embedding anisotropy problem by fine-tuning the MLM-adapted model using **MultipleNegativesRankingLoss**. The model was trained specifically to map semantic queries to legal document chunks using the 50-query synthetic ground truth dataset.
-*   **Significance**: This step transformed the model from a grammar-aware encoder into a specialized dense retriever, increasing the retrieval Hit Rate from **8%** to **72%**.
+The `07b_contrastive_finetuning.ipynb` notebook addresses the embedding anisotropy problem by fine-tuning the MLM-adapted model using **MultipleNegativesRankingLoss**. The model is trained specifically to map semantic queries to legal document chunks using the 50-query synthetic ground truth dataset.
 
 ### Stage 8: Synthetic Evaluation Data Generation
-Implemented a high-fidelity data generation pipeline using **Ollama** and the **Phi-4 Mini** model. A total of 50 complex, user-centric queries were synthetically generated and mapped to substantive (>150 char) legal document chunks to establish a Ground Truth dataset for benchmarking.
+The `08_eval_data.ipynb` notebook implements a high-fidelity data generation pipeline using **Ollama** and the **Phi-4 Mini** model. A total of 50 complex, user-centric queries are synthetically generated and mapped to substantive (>150 char) legal document chunks to establish a Ground Truth dataset for benchmarking.
 *   **Framework**: Native Google Colab execution with local unthrottled inference.
 
 ### Stage 9: Comparative Retrieval Benchmarking
-Conducted a rigorous statistical evaluation of three distinct retrieval architectures against the synthetic ground truth:
+The `09_comparative_retrieval_benchmarking.ipynb` notebook conducts a rigorous statistical evaluation of three distinct retrieval architectures against the synthetic ground truth:
 1.  **Lexical (BM25)**: Baseline keyword search.
 2.  **Generic Neural (MiniLM)**: Out-of-the-box contrastive embeddings.
 3.  **Domain-Adapted Neural (Fine-Tuned Legal-BERT)**: Custom contrastive retriever.
@@ -127,7 +126,7 @@ Conducted a rigorous statistical evaluation of three distinct retrieval architec
 **Conclusion**: The domain-specific, contrastive-trained model outperforms the industry-standard generic retriever by **140%** in retrieval precision.
 
 ### Stage 10: End-to-End Generative Evaluation
-Evaluated the complete RAG pipeline (retrieval through response generation) using a hybrid approach combining deterministic NLP metrics with LLM-based hallucination detection. All evaluation was conducted on Google Colab using Ollama and Phi-4 Mini, consistent with the methodology established in Stage 08.
+The `10_generative_evaluation.ipynb` notebook evaluates the complete RAG pipeline (retrieval through response generation) using a hybrid approach combining deterministic NLP metrics with LLM-based hallucination detection. All evaluation is conducted on Google Colab using Ollama and Phi-4 Mini, consistent with the methodology established in Stage 8.
 
 | Metric | Score | Description |
 | :--- | :--- | :--- |

@@ -73,7 +73,7 @@ def get_pdf_links(chapter):
                     links_to_visit.append(full_pagination_url)
 
     # Deduplicate links using a dictionary comprehension keyed by absolute URL
-    # This ensures we don't return the same PDF multiple times if it was linked twice on the page
+    # Prevents returning the same PDF multiple times if it was linked twice on the page
     unique_links = list({v[0]:v for v in valid_links}.values())
     return sorted(unique_links, key=lambda x: (x[1], x[2], x[3]))
 
@@ -91,7 +91,7 @@ def download_pdf(url, chapter, article, division):
         
     logger.info(f"Downloading {filename}...")
     try:
-        # We use verify=False because the docs.sandiego.gov subdomain often 
+        # Use verify=False because the docs.sandiego.gov subdomain often 
         # lacks a full certificate chain recognized by local Python environments, 
         # leading to SSLCertVerificationError.
         response = requests.get(url, stream=True, headers=HEADERS, timeout=20, verify=False)
