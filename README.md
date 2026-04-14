@@ -1,11 +1,37 @@
 # San Diego Land Use RAG
 
-A Retrieval-Augmented Generation (RAG) system designed to provide intelligent querying and analysis of the San Diego Municipal Code (Land Development Code). This project implements a complete 10-stage pipeline spanning document ingestion, domain-adapted model fine-tuning, and rigorous end-to-end evaluation of both retrieval precision and generative quality.
+-- Project Status: [Completed]
+
+## Project Intro/Objective
+
+The main purpose of this project is to build a Retrieval-Augmented Generation (RAG) system designed to provide intelligent querying and analysis of the San Diego Municipal Code (Land Development Code). This project implements a complete 10-stage pipeline spanning document ingestion, domain-adapted model fine-tuning, and rigorous end-to-end evaluation of both retrieval precision and generative quality. The goal is to make complex municipal zoning and land use regulations highly accessible to urban planners, developers, and researchers.
+
+## Methods Used
+*   Natural Language Processing (NLP)
+*   Machine Learning (Domain Adaptation)
+*   Deep Learning (Contrastive Fine-Tuning)
+*   Data Manipulation & Cleaning
+*   Information Retrieval (Hybrid Search & Reranking)
+*   Generative AI (LLM Evaluation)
+
+## Technologies
+*   Python
+*   HuggingFace Transformers (PyTorch)
+*   ChromaDB
+*   Ollama (Phi-4)
+*   Jupyter Notebooks / Google Colab
+*   Git / GitHub
+
+## Project Description
+
+This project focuses on the intricate domain of San Diego land development regulations. We utilized the raw PDF documents from the San Diego Municipal Code (specifically chapters 11-15, focusing on land development). The dataset was processed from unstructured text into thousands of semantic chunks, enriched with hierarchical metadata. Key hypotheses explored include demonstrating that domain-specific contrastive fine-tuning of an existing legal language model (Legal-BERT) significantly outperforms generic dense retrievers in specialized zoning-law queries. Our analysis included statistical benchmarking of retrieval hit rates and LLM-as-a-judge evaluation of generative faithfulness. The primary technical roadblock was overcoming embedding anisotropy (representation collapse) during the initial Masked Language Modeling phase, which we successfully addressed using MultipleNegativesRankingLoss on a synthetic ground truth validation set.
 
 ## Project Structure
 
-- `sd_land_use/`: Core Python package containing ingestion and processing logic.
+- `scripts/`: Standalone utilities for data ingestion and system evaluation.
   - `ingest.py`: CLI tool for downloading Municipal Code chapters as PDFs.
+  - `display_demo.py`: Terminal-based visualization of RAG performance.
+  - `original_comparison_metrics.py`: Evidence script for verifying representation collapse.
 - `data/`: Local storage for raw and processed documents (directory is Git-ignored).
 - `notebooks/`: Stage-based notebooks for document processing and RAG development.
   - `01_raw_pdf_inspection.ipynb`: Preliminary audit identifying layout complexity and OCR needs.
@@ -55,7 +81,7 @@ The `ingest.py` CLI tool identifies and downloads Division PDFs for specific cha
 
 **Download target chapters:**
 ```bash
-python3 sd_land_use/ingest.py --chapters 11 12 13 14 15
+python3 scripts/ingest.py --chapters 11 12 13 14 15
 ```
 
 ### Stage 2: Document Parsing
@@ -114,5 +140,13 @@ Evaluated the complete RAG pipeline (retrieval through response generation) usin
 ## Data Source
 The data is sourced from the [San Diego City Clerk Official Municipal Code](https://www.sandiego.gov/city-clerk/officialdocs/municipal-code).
 
-## Ethical Scraping Note
 This project uses a polite `User-Agent` and respect-based delays to ensure it does not overwhelm the city's servers. It is intended for academic research purposes.
+
+## License
+
+This project is licensed under the **PolyForm Noncommercial License 1.0.0**. 
+
+You are free to use, modify, and distribute this software and the associated model weights for academic, research, and non-commercial portfolio purposes. However, commercial use (using the software/models for a commercial product or service) is strictly prohibited. If you are interested in commercial licensing, please contact the author.
+
+## Acknowledgments
+I would like to thank my wonderful professors and peers in the MS-AAI program at the University of San Diego for their guidance, feedback, and support throughout the development of this capstone, and especially my capstone advisor Professor Anna Marbut.
