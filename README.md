@@ -143,9 +143,7 @@ This project uses a polite `User-Agent` and respect-based delays to ensure it do
 
 ## License
 
-This project is licensed under the **PolyForm Noncommercial License 1.0.0**. 
-
-You are free to use, modify, and distribute this software and the associated model weights for academic, research, and non-commercial portfolio purposes. However, commercial use (using the software/models for a commercial product or service) is strictly prohibited. If you are interested in commercial licensing, please contact the author.
+This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). 
 
 ## Acknowledgments
 I would like to thank my wonderful professors and peers in the MS-AAI program at the University of San Diego for their guidance, feedback, and support throughout the development of this capstone, and especially my capstone advisor Professor Anna Marbut.
